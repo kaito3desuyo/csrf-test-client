@@ -13,17 +13,24 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.http.get('//localhost:3031/').subscribe((token) => {
-      this.http
-        .post(
-          '//localhost:3031/',
-          {},
-          {
-            withCredentials: true,
-            headers: { 'Content-Type': 'application/json' },
-          }
-        )
-        .subscribe((value) => console.log('value:', value));
-    });
+    this.http
+      .get('//localhost:3031/', {
+        withCredentials: true,
+      })
+      .subscribe((token: string) => {
+        this.http
+          .post(
+            '//localhost:3031/',
+            {},
+            {
+              withCredentials: true,
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': token,
+              },
+            }
+          )
+          .subscribe((value) => console.log('value:', value));
+      });
   }
 }
